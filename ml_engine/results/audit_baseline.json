@@ -1,0 +1,201 @@
+{
+  "gender": {
+    "n_classes": 2,
+    "labels": [
+      "Female",
+      "Male"
+    ],
+    "logistic_regression": {
+      "accuracy": 1.0,
+      "balanced_accuracy": 1.0,
+      "auc_roc": 1.0,
+      "leakage_score": 0.9999999800000003,
+      "mutual_information": 0.23849483795740242
+    },
+    "mlp": {
+      "accuracy": 1.0,
+      "balanced_accuracy": 1.0,
+      "auc_roc": 1.0,
+      "leakage_score": 0.9999999800000003,
+      "mutual_information": 0.23849483795740242
+    },
+    "best_attacker_auc": 1.0,
+    "best_leakage_score": 0.9999999800000003,
+    "classification_report": {
+      "0": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 1268.0
+      },
+      "1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 1132.0
+      },
+      "accuracy": 1.0,
+      "macro avg": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 2400.0
+      },
+      "weighted avg": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 2400.0
+      }
+    },
+    "risk_level": "CRITICAL"
+  },
+  "age_group": {
+    "n_classes": 4,
+    "labels": [
+      "0-18",
+      "19-35",
+      "36-60",
+      "60+"
+    ],
+    "logistic_regression": {
+      "accuracy": 1.0,
+      "balanced_accuracy": 1.0,
+      "auc_roc": 1.0,
+      "leakage_score": 0.9999999866666668,
+      "mutual_information": 0.3947816140535203
+    },
+    "mlp": {
+      "accuracy": 1.0,
+      "balanced_accuracy": 1.0,
+      "auc_roc": 1.0,
+      "leakage_score": 0.9999999866666668,
+      "mutual_information": 0.3947816140535203
+    },
+    "best_attacker_auc": 1.0,
+    "best_leakage_score": 0.9999999866666668,
+    "classification_report": {
+      "0": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 192.0
+      },
+      "1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 1291.0
+      },
+      "2": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 726.0
+      },
+      "3": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 191.0
+      },
+      "accuracy": 1.0,
+      "macro avg": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 2400.0
+      },
+      "weighted avg": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 2400.0
+      }
+    },
+    "risk_level": "CRITICAL"
+  },
+  "ethnicity": {
+    "n_classes": 5,
+    "labels": [
+      "White",
+      "Black",
+      "Asian",
+      "Indian",
+      "Other"
+    ],
+    "logistic_regression": {
+      "accuracy": 1.0,
+      "balanced_accuracy": 1.0,
+      "auc_roc": 1.0,
+      "leakage_score": 0.9999999875000001,
+      "mutual_information": 0.46048523520864376
+    },
+    "mlp": {
+      "accuracy": 1.0,
+      "balanced_accuracy": 1.0,
+      "auc_roc": 1.0,
+      "leakage_score": 0.9999999875000001,
+      "mutual_information": 0.46048523520864376
+    },
+    "best_attacker_auc": 1.0,
+    "best_leakage_score": 0.9999999875000001,
+    "classification_report": {
+      "0": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 878.0
+      },
+      "1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 467.0
+      },
+      "2": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 558.0
+      },
+      "3": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 289.0
+      },
+      "4": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 208.0
+      },
+      "accuracy": 1.0,
+      "macro avg": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 2400.0
+      },
+      "weighted avg": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 2400.0
+      }
+    },
+    "risk_level": "CRITICAL"
+  },
+  "__aggregate__": {
+    "mean_leakage_score": 0.9999999847222224,
+    "max_leakage_score": 0.9999999875000001,
+    "tag": "baseline"
+  },
+  "__summary__": {
+    "mean_leakage_score": 0.9999999847222224,
+    "max_attacker_auc": 1.0,
+    "overall_risk_level": "CRITICAL",
+    "n_attributes_audited": 3
+  }
+}

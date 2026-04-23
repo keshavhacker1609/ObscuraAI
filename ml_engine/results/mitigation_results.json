@@ -1,0 +1,597 @@
+{
+  "baseline_results": {
+    "gender": {
+      "n_classes": 2,
+      "labels": [
+        "Female",
+        "Male"
+      ],
+      "logistic_regression": {
+        "accuracy": 1.0,
+        "balanced_accuracy": 1.0,
+        "auc_roc": 1.0,
+        "leakage_score": 0.9999999800000003,
+        "mutual_information": 0.23849483795740242
+      },
+      "mlp": {
+        "accuracy": 1.0,
+        "balanced_accuracy": 1.0,
+        "auc_roc": 1.0,
+        "leakage_score": 0.9999999800000003,
+        "mutual_information": 0.23849483795740242
+      },
+      "best_attacker_auc": 1.0,
+      "best_leakage_score": 0.9999999800000003,
+      "risk_level": "CRITICAL"
+    },
+    "age_group": {
+      "n_classes": 4,
+      "labels": [
+        "0-18",
+        "19-35",
+        "36-60",
+        "60+"
+      ],
+      "logistic_regression": {
+        "accuracy": 1.0,
+        "balanced_accuracy": 1.0,
+        "auc_roc": 1.0,
+        "leakage_score": 0.9999999866666668,
+        "mutual_information": 0.3947816140535203
+      },
+      "mlp": {
+        "accuracy": 1.0,
+        "balanced_accuracy": 1.0,
+        "auc_roc": 1.0,
+        "leakage_score": 0.9999999866666668,
+        "mutual_information": 0.3947816140535203
+      },
+      "best_attacker_auc": 1.0,
+      "best_leakage_score": 0.9999999866666668,
+      "risk_level": "CRITICAL"
+    },
+    "ethnicity": {
+      "n_classes": 5,
+      "labels": [
+        "White",
+        "Black",
+        "Asian",
+        "Indian",
+        "Other"
+      ],
+      "logistic_regression": {
+        "accuracy": 1.0,
+        "balanced_accuracy": 1.0,
+        "auc_roc": 1.0,
+        "leakage_score": 0.9999999875000001,
+        "mutual_information": 0.46048523520864376
+      },
+      "mlp": {
+        "accuracy": 1.0,
+        "balanced_accuracy": 1.0,
+        "auc_roc": 1.0,
+        "leakage_score": 0.9999999875000001,
+        "mutual_information": 0.46048523520864376
+      },
+      "best_attacker_auc": 1.0,
+      "best_leakage_score": 0.9999999875000001,
+      "risk_level": "CRITICAL"
+    },
+    "__aggregate__": {
+      "mean_leakage_score": 0.9999999847222224,
+      "max_leakage_score": 0.9999999875000001,
+      "tag": "baseline"
+    },
+    "__summary__": {
+      "mean_leakage_score": 0.9999999847222224,
+      "max_attacker_auc": 1.0,
+      "overall_risk_level": "CRITICAL",
+      "n_attributes_audited": 3
+    }
+  },
+  "adv_results": {
+    "gender": {
+      "n_classes": 2,
+      "labels": [
+        "Female",
+        "Male"
+      ],
+      "logistic_regression": {
+        "accuracy": 1.0,
+        "balanced_accuracy": 1.0,
+        "auc_roc": 1.0,
+        "leakage_score": 0.9999999800000003,
+        "mutual_information": 0.21409375189749288
+      },
+      "mlp": {
+        "accuracy": 1.0,
+        "balanced_accuracy": 1.0,
+        "auc_roc": 1.0,
+        "leakage_score": 0.9999999800000003,
+        "mutual_information": 0.21409375189749288
+      },
+      "best_attacker_auc": 1.0,
+      "best_leakage_score": 0.9999999800000003,
+      "risk_level": "CRITICAL"
+    },
+    "age_group": {
+      "n_classes": 4,
+      "labels": [
+        "0-18",
+        "19-35",
+        "36-60",
+        "60+"
+      ],
+      "logistic_regression": {
+        "accuracy": 0.9470833333333334,
+        "balanced_accuracy": 0.8341173102094241,
+        "auc_roc": 1.0,
+        "leakage_score": 0.9999999866666668,
+        "mutual_information": 0.2803459607392616
+      },
+      "mlp": {
+        "accuracy": 1.0,
+        "balanced_accuracy": 1.0,
+        "auc_roc": 1.0,
+        "leakage_score": 0.9999999866666668,
+        "mutual_information": 0.2803459607392616
+      },
+      "best_attacker_auc": 1.0,
+      "best_leakage_score": 0.9999999866666668,
+      "risk_level": "CRITICAL"
+    },
+    "ethnicity": {
+      "n_classes": 5,
+      "labels": [
+        "White",
+        "Black",
+        "Asian",
+        "Indian",
+        "Other"
+      ],
+      "logistic_regression": {
+        "accuracy": 0.7520833333333333,
+        "balanced_accuracy": 0.6379765442856898,
+        "auc_roc": 1.0,
+        "leakage_score": 0.9999999875000001,
+        "mutual_information": 0.26748035978833284
+      },
+      "mlp": {
+        "accuracy": 1.0,
+        "balanced_accuracy": 1.0,
+        "auc_roc": 1.0,
+        "leakage_score": 0.9999999875000001,
+        "mutual_information": 0.26748035978833284
+      },
+      "best_attacker_auc": 1.0,
+      "best_leakage_score": 0.9999999875000001,
+      "risk_level": "CRITICAL"
+    },
+    "__aggregate__": {
+      "mean_leakage_score": 0.9999999847222224,
+      "max_leakage_score": 0.9999999875000001,
+      "tag": "post_adversarial"
+    }
+  },
+  "noise_results": {
+    "gender": {
+      "n_classes": 2,
+      "labels": [
+        "Female",
+        "Male"
+      ],
+      "logistic_regression": {
+        "accuracy": 1.0,
+        "balanced_accuracy": 1.0,
+        "auc_roc": 1.0,
+        "leakage_score": 0.9999999800000003,
+        "mutual_information": 0.015512196707990578
+      },
+      "mlp": {
+        "accuracy": 1.0,
+        "balanced_accuracy": 1.0,
+        "auc_roc": 1.0,
+        "leakage_score": 0.9999999800000003,
+        "mutual_information": 0.015512196707990578
+      },
+      "best_attacker_auc": 1.0,
+      "best_leakage_score": 0.9999999800000003,
+      "risk_level": "CRITICAL"
+    },
+    "age_group": {
+      "n_classes": 4,
+      "labels": [
+        "0-18",
+        "19-35",
+        "36-60",
+        "60+"
+      ],
+      "logistic_regression": {
+        "accuracy": 1.0,
+        "balanced_accuracy": 1.0,
+        "auc_roc": 1.0,
+        "leakage_score": 0.9999999866666668,
+        "mutual_information": 0.02298597424694985
+      },
+      "mlp": {
+        "accuracy": 1.0,
+        "balanced_accuracy": 1.0,
+        "auc_roc": 1.0,
+        "leakage_score": 0.9999999866666668,
+        "mutual_information": 0.02298597424694985
+      },
+      "best_attacker_auc": 1.0,
+      "best_leakage_score": 0.9999999866666668,
+      "risk_level": "CRITICAL"
+    },
+    "ethnicity": {
+      "n_classes": 5,
+      "labels": [
+        "White",
+        "Black",
+        "Asian",
+        "Indian",
+        "Other"
+      ],
+      "logistic_regression": {
+        "accuracy": 1.0,
+        "balanced_accuracy": 1.0,
+        "auc_roc": 1.0,
+        "leakage_score": 0.9999999875000001,
+        "mutual_information": 0.021685514175612507
+      },
+      "mlp": {
+        "accuracy": 1.0,
+        "balanced_accuracy": 1.0,
+        "auc_roc": 1.0,
+        "leakage_score": 0.9999999875000001,
+        "mutual_information": 0.021685514175612507
+      },
+      "best_attacker_auc": 1.0,
+      "best_leakage_score": 0.9999999875000001,
+      "risk_level": "CRITICAL"
+    },
+    "__aggregate__": {
+      "mean_leakage_score": 0.9999999847222224,
+      "max_leakage_score": 0.9999999875000001,
+      "tag": "post_noise"
+    }
+  },
+  "adv_sweep": [
+    {
+      "lambda": 0.0,
+      "mean_leakage_score": 0.9999999847222224,
+      "max_leakage_score": 0.9999999875000001,
+      "identity_utility": 0.9912242282479856
+    },
+    {
+      "lambda": 0.2,
+      "mean_leakage_score": 0.9999999847222224,
+      "max_leakage_score": 0.9999999875000001,
+      "identity_utility": 0.9910290868021377
+    },
+    {
+      "lambda": 0.4,
+      "mean_leakage_score": 0.9999999847222224,
+      "max_leakage_score": 0.9999999875000001,
+      "identity_utility": 0.9887753886845
+    },
+    {
+      "lambda": 0.6,
+      "mean_leakage_score": 0.9999999847222224,
+      "max_leakage_score": 0.9999999875000001,
+      "identity_utility": 0.9608751633272057
+    },
+    {
+      "lambda": 0.8,
+      "mean_leakage_score": 0.9999999847222224,
+      "max_leakage_score": 0.9999999875000001,
+      "identity_utility": 0.7204099936622731
+    },
+    {
+      "lambda": 1.0,
+      "mean_leakage_score": 0.9999999847222224,
+      "max_leakage_score": 0.9999999875000001,
+      "identity_utility": 0.6741349199797649
+    },
+    {
+      "lambda": 1.5,
+      "mean_leakage_score": 0.9999999847222224,
+      "max_leakage_score": 0.9999999875000001,
+      "identity_utility": 0.6368079197068116
+    },
+    {
+      "lambda": 2.0,
+      "mean_leakage_score": 0.9999999847222224,
+      "max_leakage_score": 0.9999999875000001,
+      "identity_utility": 0.4109918543802572
+    }
+  ],
+  "noise_sweep": [
+    {
+      "sigma": 0.0,
+      "mean_leakage_score": 0.9999999847222224,
+      "max_leakage_score": 0.9999999875000001,
+      "identity_utility": 0.9999999891385659,
+      "snr_db": 119.99963731220302,
+      "mean_l2_distance": 9.138565493745539e-09
+    },
+    {
+      "sigma": 0.01,
+      "mean_leakage_score": 0.9999999847222224,
+      "max_leakage_score": 0.9999999875000001,
+      "identity_utility": 0.9753772128522765,
+      "snr_db": 13.076329800182496,
+      "mean_l2_distance": 0.22179906489461043
+    },
+    {
+      "sigma": 0.05,
+      "mean_leakage_score": 0.9999999847222224,
+      "max_leakage_score": 0.9999999875000001,
+      "identity_utility": 0.6625632897553627,
+      "snr_db": 1.7077768486133582,
+      "mean_l2_distance": 0.8210821191760143
+    },
+    {
+      "sigma": 0.1,
+      "mean_leakage_score": 0.9999998481278922,
+      "max_leakage_score": 0.9999999866666668,
+      "identity_utility": 0.40423194342491003,
+      "snr_db": -0.761072066780851,
+      "mean_l2_distance": 1.0910942324610784
+    },
+    {
+      "sigma": 0.2,
+      "mean_leakage_score": 0.9908331306095578,
+      "max_leakage_score": 0.9925543048093411,
+      "identity_utility": 0.21492599088549233,
+      "snr_db": -1.9594059446065661,
+      "mean_l2_distance": 1.2526260243251948
+    },
+    {
+      "sigma": 0.3,
+      "mean_leakage_score": 0.9184891672667012,
+      "max_leakage_score": 0.9259264259465861,
+      "identity_utility": 0.14423046790413085,
+      "snr_db": -2.333868155009326,
+      "mean_l2_distance": 1.3078424662791994
+    },
+    {
+      "sigma": 0.5,
+      "mean_leakage_score": 0.7330410824986773,
+      "max_leakage_score": 0.7732067733480976,
+      "identity_utility": 0.08793598641171085,
+      "snr_db": -2.6105531611753188,
+      "mean_l2_distance": 1.3502260706323257
+    }
+  ],
+  "comparison": [
+    {
+      "attribute": "gender",
+      "baseline_auc": 1.0,
+      "adv_auc": 1.0,
+      "noise_auc": 1.0,
+      "adv_reduction": 0.0,
+      "noise_reduction": 0.0,
+      "adv_reduction_pct": 0.0,
+      "noise_reduction_pct": 0.0,
+      "baseline_risk": "CRITICAL",
+      "adv_risk": "CRITICAL",
+      "noise_risk": "CRITICAL"
+    },
+    {
+      "attribute": "age_group",
+      "baseline_auc": 1.0,
+      "adv_auc": 1.0,
+      "noise_auc": 1.0,
+      "adv_reduction": 0.0,
+      "noise_reduction": 0.0,
+      "adv_reduction_pct": 0.0,
+      "noise_reduction_pct": 0.0,
+      "baseline_risk": "CRITICAL",
+      "adv_risk": "CRITICAL",
+      "noise_risk": "CRITICAL"
+    },
+    {
+      "attribute": "ethnicity",
+      "baseline_auc": 1.0,
+      "adv_auc": 1.0,
+      "noise_auc": 1.0,
+      "adv_reduction": 0.0,
+      "noise_reduction": 0.0,
+      "adv_reduction_pct": 0.0,
+      "noise_reduction_pct": 0.0,
+      "baseline_risk": "CRITICAL",
+      "adv_risk": "CRITICAL",
+      "noise_risk": "CRITICAL"
+    }
+  ],
+  "adv_training_history": {
+    "identity_loss": [
+      0.4098984373582376,
+      0.07961845397949219,
+      0.028544450128400647,
+      0.024533663247082685,
+      0.0343688517003446,
+      0.07251702772604453,
+      0.13002483587007266,
+      0.1521052798709354,
+      0.20068065701304255,
+      0.23155174223152367,
+      0.26785173931637324,
+      0.283473649540463,
+      0.27581089412843857,
+      0.28329171200056336,
+      0.2895426476323927,
+      0.28021676959218206,
+      0.29008481470314235,
+      0.2953402158376333,
+      0.31123448706961965,
+      0.3271501338159716,
+      0.3337500933054331,
+      0.35973418242222555,
+      0.34702173278138443,
+      0.3595011121517903,
+      0.360203738148148,
+      0.35084600706358215,
+      0.357278007107812,
+      0.3559851775298247,
+      0.3493133815559181,
+      0.3509973529222849,
+      0.3517459067138466,
+      0.3495135967795913,
+      0.35035446366748296,
+      0.353793927141138,
+      0.3549154529700408,
+      0.35479548654040777,
+      0.3556690328829997,
+      0.3586183995813937,
+      0.3609901296125876,
+      0.36230700080459183,
+      0.36380962423376134,
+      0.3669079074988494,
+      0.3706776403092049,
+      0.37381286556656296,
+      0.3751675470455273,
+      0.37581110483891256,
+      0.3759247741183719,
+      0.3754628123463811,
+      0.3754801508542654,
+      0.37554603492891464,
+      0.3751873438422744,
+      0.3750095915149998,
+      0.3750494331926913,
+      0.3749785987106529,
+      0.37495187649855743,
+      0.37459035821863124,
+      0.3749696580139366,
+      0.37481425581751643,
+      0.3745254535932799,
+      0.37451969932865453
+    ],
+    "attr_loss": [
+      1.2165011264182426,
+      1.1633946444537189,
+      1.0771090243313763,
+      0.9742296209206452,
+      0.880551357527037,
+      0.8425796499123445,
+      0.8860334544568449,
+      0.8649395398191504,
+      0.9037441562961888,
+      0.9396527538428435,
+      0.9768453900878494,
+      1.0077185034751892,
+      0.9921431509224145,
+      0.9688865123568354,
+      1.0122364775554553,
+      0.9696477377736891,
+      0.9901347820823257,
+      0.9826400247780053,
+      1.0207781759468284,
+      1.0234403207495406,
+      1.0600655626606297,
+      1.0676357649468087,
+      1.07106056084504,
+      1.096103623106673,
+      1.073266093795364,
+      1.0781417279630094,
+      1.0858778405833889,
+      1.072724751524023,
+      1.0710642949954883,
+      1.07470200190673,
+      1.0695688112362012,
+      1.0676375273111705,
+      1.0723854142266351,
+      1.0765313200048499,
+      1.0747420497842737,
+      1.0766092603271071,
+      1.0807435738073814,
+      1.084543125049488,
+      1.0863543297793414,
+      1.0882859036729142,
+      1.0924876831673287,
+      1.0985225439071655,
+      1.104267893610774,
+      1.1077174528225049,
+      1.10904454540562,
+      1.110981677029584,
+      1.1104882536707699,
+      1.1110280043370016,
+      1.1113948080990765,
+      1.1118914114462364,
+      1.1104622853768837,
+      1.1097951901925576,
+      1.110311904469052,
+      1.1098143571131938,
+      1.109448842100195,
+      1.108927762186205,
+      1.1099868883957733,
+      1.10976259772842,
+      1.1087131886868864,
+      1.1090164990038485
+    ],
+    "total_loss": [
+      1.3830993384928316,
+      1.0103341695424672,
+      0.8902316695935019,
+      0.8039173599835989,
+      0.7388099377219742,
+      0.7465807476559202,
+      0.8388515994355485,
+      0.8440569117262557,
+      0.9236759820499937,
+      0.9832739453057986,
+      1.0493280513866527,
+      1.0896484523206145,
+      1.0695254148663702,
+      1.0584009218860317,
+      1.099331829676757,
+      1.0559349598111334,
+      1.082192640369003,
+      1.0814522356600373,
+      1.1278570278270825,
+      1.145902390415604,
+      1.1818025434339368,
+      1.2138427943796724,
+      1.2038701814574164,
+      1.2363840106371287,
+      1.2188166131844391,
+      1.2133593894339896,
+      1.2259802795745232,
+      1.2141649787490432,
+      1.2061648175523088,
+      1.210758954447669,
+      1.2074009557028076,
+      1.2036236186285276,
+      1.2082627950487912,
+      1.215018983145018,
+      1.2147090927974598,
+      1.2160828948020934,
+      1.2202638919289048,
+      1.226252899620984,
+      1.230073593436061,
+      1.2329357237429233,
+      1.2377997707676243,
+      1.245725942624582,
+      1.2540919551978242,
+      1.259986827824567,
+      1.2624031833700233,
+      1.2645964464625798,
+      1.2643153770549878,
+      1.2642852158159823,
+      1.2645959973335266,
+      1.2650591640859037,
+      1.2635571721437815,
+      1.2628457436690461,
+      1.2632989567679327,
+      1.2628300844012081,
+      1.2625109501787135,
+      1.2617325679675953,
+      1.2629591687305555,
+      1.2626243340002525,
+      1.261496004542789,
+      1.2617328985317335
+    ]
+  }
+}

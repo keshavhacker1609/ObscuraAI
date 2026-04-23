@@ -1,0 +1,43 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+.env
+.env.*
+*.sqlite3
+*.db
+
+# Node / React
+node_modules/
+frontend/dist/
+frontend/build/
+.npm
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.suo
+*.user
+
+# Logs
+*.log
+logs/
+
+# ML / Data
+*.pkl
+*.joblib
+*.h5
+*.csv
+data/raw/
+data/processed/

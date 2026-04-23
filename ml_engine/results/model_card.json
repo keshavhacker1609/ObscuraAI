@@ -1,0 +1,137 @@
+{
+  "model_card_version": "1.0",
+  "framework": "AI Privacy Intelligence Framework",
+  "reference": "IEEE TPAMI / TIFS / ICCV 2021",
+  "dataset": {
+    "name": "Synthetic CelebA-like Dataset",
+    "n_samples": 12000,
+    "embedding_dim": 512,
+    "attributes": [
+      "gender",
+      "age_group",
+      "ethnicity"
+    ],
+    "source": "Synthetically generated with realistic attribute correlations",
+    "reference": "Wang et al. (2019) Race Faces in the Wild, ICCVW"
+  },
+  "privacy_analysis": {
+    "baseline": {
+      "gender": {
+        "lr_auc": 1.0,
+        "mlp_auc": 1.0,
+        "best_auc": 1.0,
+        "leakage_score": 0.9999999800000003,
+        "mutual_info": 0.26577154710133233,
+        "risk_level": "CRITICAL",
+        "accuracy": 1.0,
+        "balanced_accuracy": 1.0
+      },
+      "age_group": {
+        "lr_auc": 1.0,
+        "mlp_auc": 1.0,
+        "best_auc": 1.0,
+        "leakage_score": 0.9999999866666668,
+        "mutual_info": 0.35629316248770987,
+        "risk_level": "CRITICAL",
+        "accuracy": 1.0,
+        "balanced_accuracy": 1.0
+      },
+      "ethnicity": {
+        "lr_auc": 1.0,
+        "mlp_auc": 1.0,
+        "best_auc": 1.0,
+        "leakage_score": 0.9999999875000001,
+        "mutual_info": 0.4635190146315679,
+        "risk_level": "CRITICAL",
+        "accuracy": 1.0,
+        "balanced_accuracy": 1.0
+      },
+      "aggregate": {
+        "mean_auc": 1.0,
+        "max_auc": 1.0,
+        "mean_leakage_score": 0.9999999847222224,
+        "max_leakage_score": 0.9999999875000001
+      }
+    },
+    "overall_risk": "CRITICAL",
+    "mean_leakage_score": 0.9999999847222224
+  },
+  "mitigation": {
+    "techniques_applied": [
+      "adversarial_disentanglement",
+      "gaussian_noise_injection"
+    ],
+    "comparison_table": [
+      {
+        "attribute": "gender",
+        "baseline_auc": 1.0,
+        "adv_auc": 1.0,
+        "noise_auc": 1.0,
+        "adv_reduction": 0.0,
+        "noise_reduction": 0.0,
+        "adv_reduction_pct": 0.0,
+        "noise_reduction_pct": 0.0,
+        "baseline_risk": "CRITICAL",
+        "adv_risk": "CRITICAL",
+        "noise_risk": "CRITICAL"
+      },
+      {
+        "attribute": "age_group",
+        "baseline_auc": 1.0,
+        "adv_auc": 1.0,
+        "noise_auc": 1.0,
+        "adv_reduction": 0.0,
+        "noise_reduction": 0.0,
+        "adv_reduction_pct": 0.0,
+        "noise_reduction_pct": 0.0,
+        "baseline_risk": "CRITICAL",
+        "adv_risk": "CRITICAL",
+        "noise_risk": "CRITICAL"
+      },
+      {
+        "attribute": "ethnicity",
+        "baseline_auc": 1.0,
+        "adv_auc": 1.0,
+        "noise_auc": 1.0,
+        "adv_reduction": 0.0,
+        "noise_reduction": 0.0,
+        "adv_reduction_pct": 0.0,
+        "noise_reduction_pct": 0.0,
+        "baseline_risk": "CRITICAL",
+        "adv_risk": "CRITICAL",
+        "noise_risk": "CRITICAL"
+      }
+    ],
+    "adversarial_lambda": 0.8,
+    "noise_sigma_best": 0.1
+  },
+  "utility": {
+    "note": "TAR@FAR requires paired identity data; using cosine similarity proxy."
+  },
+  "fairness": {
+    "per_group_leakage": {},
+    "max_demographic_disparity": 0.0,
+    "fairness_gap": 0.0,
+    "n_groups_analyzed": 0
+  },
+  "recommendations": [
+    "CRITICAL: Apply strong adversarial disentanglement (\u03bb\u22651.0) before deployment.",
+    "Ethnicity leakage is high \u2014 consider targeted attribute suppression for this dimension.",
+    "Periodically re-audit after model updates or dataset shifts."
+  ],
+  "generated_at": "2026-04-03T09:22:34.166201Z",
+  "visualizations": {
+    "roc_curves": "roc_curves.png",
+    "leakage_bars": "leakage_bars.png",
+    "leakage_radar": "leakage_radar.png",
+    "tradeoff_curves": "tradeoff_curves.png",
+    "before_after": "before_after.png",
+    "training_history": "training_history.png",
+    "fairness_disparity": "fairness_disparity.png"
+  },
+  "attribute_narratives": {
+    "gender": "Gender leakage was classified as CRITICAL with AUC=1.000 (LR=1.000, MLP=1.000). After adversarial disentanglement, AUC reduced to 1.000 (\u21930.0% reduction). Leakage score: 1.000 \u2192 1.000.",
+    "age_group": "Age Group leakage was classified as CRITICAL with AUC=1.000 (LR=1.000, MLP=1.000). After adversarial disentanglement, AUC reduced to 1.000 (\u21930.0% reduction). Leakage score: 1.000 \u2192 1.000.",
+    "ethnicity": "Ethnicity leakage was classified as CRITICAL with AUC=1.000 (LR=1.000, MLP=1.000). After adversarial disentanglement, AUC reduced to 1.000 (\u21930.0% reduction). Leakage score: 1.000 \u2192 1.000."
+  }
+}

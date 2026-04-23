@@ -1,0 +1,6 @@
+{
+  "per_group_leakage": {},
+  "max_demographic_disparity": 0.0,
+  "fairness_gap": 0.0,
+  "n_groups_analyzed": 0
+}
