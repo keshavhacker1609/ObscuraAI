@@ -1,53 +1,64 @@
-# AI Privacy Intelligence Framework 🛡️
+# ObscuraAI 🕶️
 
-A unified, full-stack framework for auditing, mitigating, and reporting attribute leakage in large-scale Face Recognition Models.
+### Adversarial Disentanglement Framework for Demographic Leakage Auditing and Mitigation in Face Recognition Systems
 
-## Overview
-This platform is designed to provide end-to-end accountability for privacy risks in embeddings. It systematically quantifies how much sensitive demographic information (like Gender, Age Group, Ethnicity) is leaked through feature vectors optimized for identity recognition. 
+> Modern face recognition models silently encode sensitive demographic attributes — gender, age, ethnicity — inside their embedding vectors. **ObscuraAI** detects, quantifies, and eliminates this leakage through a fully automated three-stage pipeline, backed by a live React dashboard and an async FastAPI orchestration layer.
 
-### Key Modules:
-- **Module 1: Auditing** — Measures the exact privacy vulnerability using statistical modeling and adversary classification (LR and MLP).
-- **Module 2: Mitigation** — Applies Adversarial Disentanglement (Gradient Reversal) and Noise Injection to mask sensitive traits without destroying identity recognition utility.
-- **Module 3: Reporting** — Generates complete IEEE-standardized model cards, evaluates fairness disparity (MDD), and creates secure accountability logs.
+---
 
-## System Architecture
+## 🔍 What It Does
 
-The ecosystem relies on an asynchronous backend architecture coupled with a clean React dashboard designed to Google Stitch visual specifications.
+Face recognition systems produce high-dimensional feature embeddings optimized for identity matching. A critical but overlooked side-effect is **attribute leakage** — adversarial classifiers can reliably extract demographic traits from these embeddings with high accuracy, posing serious GDPR and AI fairness compliance risks.
 
-1. **`ml_engine/`:** Pure Python scientific core containing PyTorch architectures, synthetic dataset generation, plotting libraries, and mitigation utilities.  
-2. **`backend/`:** A FastAPI application (`localhost:8000`) functioning as a background orchestrator. It manages asynchronous pipeline runs to allow users to start heavy ML jobs without blocking the HTTP thread, offering live polling endpoints.
-3. **`frontend/`:** A modern Vite + React dashboard (`localhost:3000`) consuming the FastAPI data. It renders the data through beautiful Recharts and visually rich dashboards.
+**ObscuraAI** provides end-to-end accountability for this privacy vulnerability:
 
-## Procedure: How the System Works
+| Module | Purpose |
+|--------|---------|
+| **Module 1 — Audit** | Trains LR + MLP attacker models against raw embeddings to measure baseline demographic leakage (AUC scores per attribute) |
+| **Module 2 — Mitigate** | Applies Adversarial Disentanglement (Gradient Reversal Layer) and Gaussian Noise Injection to sanitize embeddings |
+| **Module 3 — Report** | Generates IEEE-standardized model cards, Max Demographic Disparity (MDD) scores, TAR@FAR utility metrics, and 7 publication-quality plots |
 
-### 1. Initiation
-The user interacts with the **Overview Dashboard** and clicks "Run Pipeline".
-The React frontend sends a POST request to the backend `POST /pipeline/run?dataset=synthetic&sweep=true`.
+---
 
-### 2. Async Execution (Backend & ML Engine)
-The backend accepts the request and spins up a background thread via `pipeline_runner.py`.
-- **Dataset Creation:** The ML Engine creates an intricate 512-dim embedding set mimicking realistic face vectors (using an internal synthetic generative script).
-- **Audit:** The system trains an attacker model against these vectors to learn demographics. It then tests them on a hold-out test set to get the "Baseline AUC".
-- **Mitigation Sweeps:** The system runs an optimizer attempting two things natively via PyTorch: 
-  - Erasing demographics through Adversarial Networks (GRL).
-  - Injecting varying levels of Gaussian Noise.
-- **Visuals & Metrics:** The system automatically drafts 7 comprehensive PNG charts (saved natively) and outputs standard IEEE fairness JSON metadata. 
+## 🏗️ System Architecture
 
-### 3. Verification & Polling
-Throughout this runtime, the React frontend continuously polls `GET /pipeline/status`.
-The user watches the progress bar live on the dashboard. Upon completion, the UI automatically opens up navigation to the rest of the app.
+```
+ObscuraAI/
+├── ml_engine/              # Core scientific pipeline (PyTorch, NumPy, scikit-learn)
+│   ├── module1_audit/      # Attacker models, leakage AUC computation
+│   ├── module2_mitigate/   # Adversarial GRL, noise injection, lambda sweeps
+│   ├── module3_report/     # Fairness engine, visualizer, model card generator
+│   └── data/               # Synthetic 512-dim face embedding generator
+├── backend/                # FastAPI async orchestrator (port 8000)
+│   ├── routes/             # /audit, /mitigate, /pipeline, /report, /visualizations
+│   └── services/           # Background pipeline runner, leakage detector
+└── frontend/               # Vite + React dashboard (port 3000)
+    └── src/
+        ├── pages/          # Dashboard, Audit, Mitigation, Report, Visualizations
+        └── components/     # LeakageRadar, TradeoffChart, MetricCard, RiskBadge
+```
 
-### 4. Exploring the Artifacts
-- **Auditing Page:** Retrieves the generated JSON from `/audit` and dynamically creates radar plots representing leakage.
-- **Mitigation Page:** Compares before/after trade-off curves fetching from `/mitigate`.
-- **Reporting Page:** Integrates the IEEE model card metrics, displaying cryptographic logs.
-- **Visualizations Details:** Fetches raw generated PNGs from `/visualizations` and serves them with a custom zoom integration.
+---
 
-## Installation & Running Locally
+## ⚙️ How the Pipeline Works
 
-Ensure you are located at the root of the project. A valid Python `venv` instance and Node installation are required.
+1. **User clicks "Run Pipeline"** on the React dashboard
+2. Frontend sends `POST /pipeline/run?dataset=synthetic&sweep=true`
+3. Backend spawns a background thread and runs all 3 modules asynchronously
+4. Frontend continuously polls `GET /pipeline/status` — live progress bar updates in real-time
+5. On completion, the full dashboard unlocks:
+   - **Audit Page** — demographic leakage radar charts per attribute
+   - **Mitigation Page** — before/after utility vs. privacy trade-off curves
+   - **Report Page** — IEEE model card with fairness scores and cryptographic logs
+   - **Visualizations** — 7 auto-generated PNG plots with zoom integration
 
-### Terminal 1: Backend
+---
+
+## 🚀 Running Locally
+
+Requires Python 3.9+ with `venv` and Node.js.
+
+### Terminal 1 — Backend
 ```bash
 cd backend
 ..\venv\Scripts\activate
@@ -55,14 +66,45 @@ pip install -r requirements.txt
 uvicorn main:app --reload --port 8000
 ```
 
-### Terminal 2: Frontend
+### Terminal 2 — Frontend
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-Open `http://localhost:3000` to interact with the interface.
+Open **http://localhost:3000** to interact with the dashboard.
 
 ---
-_Built with Vite, React, Recharts, PyTorch, and FastAPI._
+
+## 🧪 Run Pipeline Directly (CLI)
+```bash
+python ml_engine/run_full_pipeline.py --dataset synthetic
+```
+
+Add `--skip-sweep` for a faster run without the full λ/σ parameter sweep.
+
+---
+
+## 📊 Key Metrics Produced
+
+- **Baseline Leakage AUC** — per demographic attribute (gender, age, ethnicity)
+- **Post-Mitigation AUC** — after adversarial disentanglement and noise injection
+- **Max Demographic Disparity (MDD)** — IEEE fairness compliance score
+- **TAR@FAR** — identity verification utility preserved after sanitization
+- **Risk Level** — overall privacy risk classification (Low / Medium / High / Critical)
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technologies |
+|-------|-------------|
+| ML Core | PyTorch, scikit-learn, NumPy, Matplotlib |
+| Backend | FastAPI, Uvicorn, Python 3.9+ |
+| Frontend | React, Vite, Recharts, CSS3 |
+| Data | Synthetic 512-dim CelebA-inspired embeddings |
+
+---
+
+_Built with PyTorch · FastAPI · React · Recharts · Vite_
