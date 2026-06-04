@@ -119,12 +119,12 @@ def main(dataset_name: str = "synthetic", run_sweep: bool = True):
 
     # ── Done ───────────────────────────────────────────────────────────────────
     elapsed = time.time() - t_start
-    print(f"\n{'═'*60}")
+    print(f"\n{'='*60}")
     print(f"  PIPELINE COMPLETE in {elapsed:.1f}s")
     print(f"  Results   → {RESULTS_DIR}")
     print(f"  Plots     → {RESULTS_DIR.parent / 'static' / 'plots'}")
     print(f"  Risk Level: {audit_baseline.get('__summary__', {}).get('overall_risk_level', 'N/A')}")
-    print(f"{'═'*60}\n")
+    print(f"{'='*60}\n")
 
     return {
         "audit":      audit_baseline,

@@ -4,10 +4,9 @@ Module 3: Metrics Engine
 Computes all privacy, utility, and fairness metrics referenced in:
 
   NIST Face Recognition Vendor Test (FRVT) 2023 — Privacy Analysis Framework.
-  Gong & Liu (2021) "mitigating Face Recognition Bias via Group-Adaptive
+  Gong & Liu (2021) "Mitigating Face Recognition Bias via Group-Adaptive
     Classifier", CVPR.
-  Dhar et al. (2021) "PASS: Protected Attribute Suppression System for
-    Mitigating Bias in Face Recognition", ICCV.
+  Dhar et al. (2021) "PASS: Protected Attribute Suppression System", ICCV.
 
 Metrics:
   Privacy:
@@ -19,18 +18,17 @@ Metrics:
     - Face verification TAR@FAR (simulated from embedding similarity)
   Fairness:
     - Per-demographic leakage disparity
-    - Equalised Odds difference
+    - Equalised Odds difference (TPR gap across groups)
     - Max Demographic Disparity (MDD)
 """
 
 import numpy as np
-import json
 from pathlib import Path
 from typing import Optional
 import sys
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-from ml_engine.config import ATTRIBUTES, RESULTS_DIR, RANDOM_SEED
+from ml_engine.config import ATTRIBUTES, RANDOM_SEED
 
 np.random.seed(RANDOM_SEED)
 
@@ -45,18 +43,18 @@ def compute_privacy_metrics(audit_results: dict) -> dict:
             continue
         r = audit_results[attr]
         metrics[attr] = {
-            "lr_auc":           r["logistic_regression"]["auc_roc"],
-            "mlp_auc":          r["mlp"]["auc_roc"],
-            "best_auc":         r["best_attacker_auc"],
-            "leakage_score":    r["best_leakage_score"],
-            "mutual_info":      r["mlp"]["mutual_information"],
-            "risk_level":       r["risk_level"],
-            "accuracy":         r["mlp"]["accuracy"],
+            "lr_auc":            r["logistic_regression"]["auc_roc"],
+            "mlp_auc":           r["mlp"]["auc_roc"],
+            "best_auc":          r["best_attacker_auc"],
+            "leakage_score":     r["best_leakage_score"],
+            "mutual_info":       r["mlp"]["mutual_information"],
+            "risk_level":        r["risk_level"],
+            "accuracy":          r["mlp"]["accuracy"],
             "balanced_accuracy": r["mlp"]["balanced_accuracy"],
         }
-    # Aggregate
-    aucs = [v["best_auc"] for v in metrics.values()]
-    leaks = [v["leakage_score"] for v in metrics.values()]
+
+    aucs  = [v["best_auc"]       for v in metrics.values()]
+    leaks = [v["leakage_score"]  for v in metrics.values()]
     metrics["aggregate"] = {
         "mean_auc":           float(np.mean(aucs)),
         "max_auc":            float(np.max(aucs)),
@@ -77,11 +75,8 @@ def compute_verification_tar_at_far(
     """
     Simulate face verification TAR@FAR using cosine similarity.
 
-    Genuine pairs: same identity embedding (slightly perturbed).
-    Impostor pairs: cross-identity embedding pairs.
-
-    For sanitised embeddings, we measure how well the threshold
-    separating genuines from impostors is preserved.
+    Genuine pairs:  original vs. sanitised embedding of the same sample.
+    Impostor pairs: original vs. a different sanitised sample.
     """
     np.random.seed(RANDOM_SEED)
     N = min(len(embeddings_original), n_pairs)
@@ -90,41 +85,44 @@ def compute_verification_tar_at_far(
     emb_orig = embeddings_original[idx]
     emb_san  = embeddings_sanitised[idx]
 
-    # Genuine pairs: same sample (original vs sanitised)
-    genuine_cos = np.sum(emb_orig * emb_san, axis=1)  # (N,)
-
-    # Impostor pairs: random off-diagonal pairs
+    genuine_cos  = np.sum(emb_orig * emb_san, axis=1)
     idx2 = np.roll(idx, 1)
-    emb_imp = embeddings_sanitised[idx2]
-    impostor_cos = np.sum(emb_orig * emb_imp, axis=1)
+    impostor_cos = np.sum(emb_orig * embeddings_sanitised[idx2], axis=1)
 
-    all_scores = np.concatenate([genuine_cos, impostor_cos])
-    all_labels = np.concatenate([np.ones(N), np.zeros(N)])
-
-    # TAR @ FAR
     tar_far = {}
-    thresholds = np.sort(all_scores)[::-1]
     for far_target in far_targets:
         n_far = int(far_target * N)
         if n_far == 0:
             continue
-        # Find threshold that gives ≤ FAR
         imp_sorted = np.sort(impostor_cos)[::-1]
-        if n_far <= len(imp_sorted):
-            threshold = imp_sorted[n_far - 1]
-        else:
-            threshold = -1.0
+        threshold  = imp_sorted[min(n_far - 1, len(imp_sorted) - 1)]
         tar = float(np.mean(genuine_cos >= threshold))
         tar_far[f"TAR@FAR{far_target}"] = round(tar, 4)
 
-    # Overall utility: mean genuine similarity
-    tar_far["mean_genuine_similarity"] = float(np.mean(genuine_cos))
+    tar_far["mean_genuine_similarity"]  = float(np.mean(genuine_cos))
     tar_far["mean_impostor_similarity"] = float(np.mean(impostor_cos))
-
     return tar_far
 
 
 # ─── Fairness Metrics ─────────────────────────────────────────────────────────
+
+def _compute_equalised_odds_difference(
+    results_by_group: dict,
+    target_attr: str = "gender",
+) -> float:
+    """
+    Equalised Odds Difference: max |TPR_g1 − TPR_g2| across all group pairs.
+
+    Uses balanced_accuracy as a proxy for TPR when ground-truth TPR is unavailable.
+    """
+    baccuracies = []
+    for group, results in results_by_group.items():
+        if target_attr in results:
+            baccuracies.append(results[target_attr]["mlp"]["balanced_accuracy"])
+    if len(baccuracies) < 2:
+        return 0.0
+    return float(max(baccuracies) - min(baccuracies))
+
 
 def compute_fairness_metrics(
     audit_results_by_group: dict,
@@ -135,16 +133,11 @@ def compute_fairness_metrics(
     Parameters
     ----------
     audit_results_by_group : {group_name: audit_result_dict}
-      Each group audit result comes from auditing embeddings
-      filtered to a specific demographic subgroup.
 
     Returns
     -------
-    dict with:
-      - per_group_leakage
-      - max_demographic_disparity (MDD)
-      - equalised_odds_difference
-      - fairness_gap
+    dict with per_group_leakage, max_demographic_disparity,
+    equalised_odds_difference, fairness_gap, n_groups_analyzed.
     """
     group_leakage = {}
     for group, results in audit_results_by_group.items():
@@ -158,13 +151,15 @@ def compute_fairness_metrics(
         }
 
     values = [v["mean_leakage"] for v in group_leakage.values()]
-    mdd = float(max(values) - min(values)) if values else 0.0
+    mdd    = float(max(values) - min(values)) if len(values) >= 2 else 0.0
+    eod    = _compute_equalised_odds_difference(audit_results_by_group)
 
     return {
-        "per_group_leakage":        group_leakage,
-        "max_demographic_disparity": mdd,
-        "fairness_gap":             mdd,
-        "n_groups_analyzed":        len(group_leakage),
+        "per_group_leakage":           group_leakage,
+        "max_demographic_disparity":   mdd,
+        "equalised_odds_difference":   eod,
+        "fairness_gap":                mdd,
+        "n_groups_analyzed":           len(group_leakage),
     }
 
 
@@ -179,18 +174,18 @@ def compute_fairness_from_audit(
     """
     from ml_engine.config import ATTRIBUTES as ATTR_CFG
     group_labels = labels[group_attr]
-    n_groups = ATTR_CFG[group_attr]["n_classes"]
-    group_names = ATTR_CFG[group_attr]["labels"]
+    n_groups     = ATTR_CFG[group_attr]["n_classes"]
+    group_names  = ATTR_CFG[group_attr]["labels"]
 
     results_by_group = {}
     for g in range(n_groups):
         mask = group_labels == g
-        if mask.sum() < 50:   # skip tiny groups
+        if mask.sum() < 50:
             continue
-        emb_g = embeddings[mask]
+        emb_g    = embeddings[mask]
         labels_g = {attr: labels[attr][mask] for attr in ATTRIBUTES}
 
-        N_g = len(emb_g)
+        N_g   = len(emb_g)
         split = max(int(0.2 * N_g), 10)
         X_tr, X_te = emb_g[:-split], emb_g[-split:]
         y_tr = {a: labels_g[a][:-split] for a in ATTRIBUTES}
@@ -214,48 +209,41 @@ def build_model_card(
     fairness_results: dict,
     tar_far_results: Optional[dict] = None,
 ) -> dict:
-    """
-    Build an IEEE model card–style structured report.
-    """
+    """Build an IEEE model card–style structured report."""
     priv_metrics = compute_privacy_metrics(audit_results)
 
     card = {
         "model_card_version": "1.0",
-        "framework": "AI Privacy Intelligence Framework",
-        "reference": "IEEE TPAMI / TIFS / ICCV 2021",
-
-        "dataset": dataset_info,
-
+        "framework":          "ObscuraAI — Privacy Intelligence Framework",
+        "reference":          "IEEE TPAMI / TIFS / ICCV 2021",
+        "dataset":            dataset_info,
         "privacy_analysis": {
-            "baseline": priv_metrics,
-            "overall_risk": audit_results.get("__summary__", {}).get("overall_risk_level", "UNKNOWN"),
+            "baseline":          priv_metrics,
+            "overall_risk":      audit_results.get("__summary__", {}).get("overall_risk_level", "UNKNOWN"),
             "mean_leakage_score": priv_metrics["aggregate"]["mean_leakage_score"],
         },
-
         "mitigation": {
             "techniques_applied": ["adversarial_disentanglement", "gaussian_noise_injection"],
-            "comparison_table": mitigation_results.get("comparison", []),
+            "comparison_table":   mitigation_results.get("comparison", []),
             "adversarial_lambda": 0.8,
-            "noise_sigma_best": 0.1,
+            "noise_sigma_best":   0.1,
         },
-
         "utility": tar_far_results or {
             "note": "TAR@FAR requires paired identity data; using cosine similarity proxy."
         },
-
-        "fairness": fairness_results,
-
-        "recommendations": _generate_recommendations(priv_metrics, fairness_results),
+        "fairness":          fairness_results,
+        "recommendations":   _generate_recommendations(priv_metrics, fairness_results),
     }
 
     return card
 
 
 def _generate_recommendations(priv_metrics: dict, fairness: dict) -> list:
-    recs = []
-    agg = priv_metrics.get("aggregate", {})
+    recs  = []
+    agg   = priv_metrics.get("aggregate", {})
     mean_leak = agg.get("mean_leakage_score", 0)
-    mdd = fairness.get("max_demographic_disparity", 0)
+    mdd   = fairness.get("max_demographic_disparity", 0)
+    eod   = fairness.get("equalised_odds_difference", 0)
 
     if mean_leak > 0.7:
         recs.append("CRITICAL: Apply strong adversarial disentanglement (λ≥1.0) before deployment.")
@@ -265,10 +253,24 @@ def _generate_recommendations(priv_metrics: dict, fairness: dict) -> list:
         recs.append("MODERATE: Noise injection (σ=0.05) sufficient for most threat models.")
 
     if mdd > 0.2:
-        recs.append("FAIRNESS: Significant demographic disparity detected. Apply group-aware regularization.")
+        recs.append(
+            f"FAIRNESS (MDD={mdd:.3f}): Significant demographic disparity detected. "
+            "Apply group-aware regularisation or re-balance training data."
+        )
+
+    if eod > 0.15:
+        recs.append(
+            f"EQUALISED ODDS (EOD={eod:.3f}): Unequal TPR across demographic groups. "
+            "Consider post-processing calibration."
+        )
 
     if priv_metrics.get("ethnicity", {}).get("best_auc", 0) > 0.8:
-        recs.append("Ethnicity leakage is high — consider targeted attribute suppression for this dimension.")
+        recs.append(
+            "Ethnicity leakage is HIGH — apply targeted attribute suppression "
+            "for this dimension before public deployment."
+        )
 
-    recs.append("Periodically re-audit after model updates or dataset shifts.")
+    recs.append(
+        "Periodically re-audit after any model update, fine-tuning, or dataset distribution shift."
+    )
     return recs

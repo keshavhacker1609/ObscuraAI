@@ -55,9 +55,9 @@ def run_mitigation_pipeline(
       - noise_sweep       : σ-sweep trade-off data
       - comparison        : side-by-side before/after table
     """
-    print(f"\n{'═'*60}")
+    print(f"\n{'='*60}")
     print(f"  MODULE 2: ATTRIBUTE LEAKAGE MITIGATION")
-    print(f"{'═'*60}")
+    print(f"{'='*60}")
 
     # ── Load data ─────────────────────────────────────────────────────────────
     ds = load_dataset(dataset_name)

@@ -17,7 +17,7 @@ from sklearn.model_selection import train_test_split
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from ml_engine.config import (
-    RANDOM_SEED, TEST_SIZE, VAL_SIZE, RESULTS_DIR, ATTRIBUTES, DATASET_NAME
+    RANDOM_SEED, TEST_SIZE, RESULTS_DIR, ATTRIBUTES, DATASET_NAME
 )
 from ml_engine.data.generate_synthetic_celeba import load_dataset
 from ml_engine.module1_audit.attacker import run_attribute_audit
@@ -45,9 +45,9 @@ def run_audit_pipeline(
     -------
     Structured audit results dict
     """
-    print(f"\n{'═'*60}")
+    print(f"\n{'='*60}")
     print(f"  MODULE 1: ATTRIBUTE LEAKAGE AUDITING  [tag={tag}]")
-    print(f"{'═'*60}")
+    print(f"{'='*60}")
 
     # ── 1. Load data ──────────────────────────────────────────────────────────
     if embeddings is None or labels is None:
@@ -63,22 +63,17 @@ def run_audit_pipeline(
     N, D = embeddings.shape
     print(f"[Audit] Dataset: N={N:,} samples, D={D}-dim embeddings")
 
-    # ── 2. Train / test split ─────────────────────────────────────────────────
-    # Stratified on gender (most balanced attribute)
-    X_train, X_test, g_train, g_test = train_test_split(
-        embeddings, labels["gender"],
-        test_size=TEST_SIZE, random_state=RANDOM_SEED, stratify=labels["gender"]
-    )
-    # We need the same indices for all attributes
+    # ── 2. Train / test split (stratified on gender) ──────────────────────────
     idx_all = np.arange(N)
     idx_train, idx_test = train_test_split(
-        idx_all, test_size=TEST_SIZE,
-        random_state=RANDOM_SEED, stratify=labels["gender"]
+        idx_all,
+        test_size=TEST_SIZE,
+        random_state=RANDOM_SEED,
+        stratify=labels["gender"],
     )
 
     X_train = embeddings[idx_train]
     X_test  = embeddings[idx_test]
-
     y_train_dict = {attr: labels[attr][idx_train] for attr in ATTRIBUTES}
     y_test_dict  = {attr: labels[attr][idx_test]  for attr in ATTRIBUTES}
 
@@ -118,7 +113,6 @@ def _build_summary(results: dict) -> dict:
     mean_leak = float(np.mean([v["best_leakage_score"] for v in per_attr.values()]))
     max_auc   = float(np.max([v["best_attacker_auc"]   for v in per_attr.values()]))
 
-    # Overall risk based on worst attribute
     overall_risk = "NEGLIGIBLE"
     for level, thresh in RISK_THRESHOLDS.items():
         if max_auc >= thresh:
@@ -126,9 +120,9 @@ def _build_summary(results: dict) -> dict:
             break
 
     return {
-        "mean_leakage_score": mean_leak,
-        "max_attacker_auc":   max_auc,
-        "overall_risk_level": overall_risk,
+        "mean_leakage_score":   mean_leak,
+        "max_attacker_auc":     max_auc,
+        "overall_risk_level":   overall_risk,
         "n_attributes_audited": len(per_attr),
     }
 
@@ -136,21 +130,17 @@ def _build_summary(results: dict) -> dict:
 def _save_json(data: dict, path: Path):
     """Recursively convert numpy types for JSON serialisation."""
     def _convert(obj):
-        if isinstance(obj, (np.integer,)):
-            return int(obj)
-        if isinstance(obj, (np.floating,)):
-            return float(obj)
-        if isinstance(obj, np.ndarray):
-            return obj.tolist()
+        if isinstance(obj, np.integer):  return int(obj)
+        if isinstance(obj, np.floating): return float(obj)
+        if isinstance(obj, np.ndarray):  return obj.tolist()
         return obj
 
     def _recurse(obj):
-        if isinstance(obj, dict):
-            return {k: _recurse(v) for k, v in obj.items()}
-        if isinstance(obj, list):
-            return [_recurse(i) for i in obj]
+        if isinstance(obj, dict):  return {k: _recurse(v) for k, v in obj.items()}
+        if isinstance(obj, list):  return [_recurse(i) for i in obj]
         return _convert(obj)
 
+    path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w") as f:
         json.dump(_recurse(data), f, indent=2)
 

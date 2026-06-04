@@ -694,6 +694,7 @@ tr:hover td { background: var(--slate-50); }
 }
 
 .plot-card:hover { box-shadow: var(--shadow-md); border-color: var(--blue-100); }
+.plot-card:hover .plot-card-actions { opacity: 1 !important; }
 .plot-card img { width: 100%; display: block; }
 .plot-card-label {
   padding: 10px 14px;
